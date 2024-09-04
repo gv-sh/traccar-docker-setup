@@ -12,8 +12,11 @@ RUN git clone --recursive https://github.com/traccar/traccar.git .
 # Build the backend using Gradle
 RUN ./gradlew assemble
 
-# Copy the configuration file into the image
-COPY ./setup/traccar.xml /opt/traccar/conf/traccar.xml
+# Ensure the conf directory exists
+RUN mkdir -p /opt/traccar/conf
+
+# Copy traccar.xml from the setup folder inside the cloned repository
+RUN cp setup/traccar.xml /opt/traccar/conf/traccar.xml
 
 # Set JVM options and run the application
 ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true", "-jar", "target/tracker-server.jar", "conf/traccar.xml"]
