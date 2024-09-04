@@ -1,6 +1,8 @@
 # webapp/Dockerfile.webapp
 FROM node:18-alpine as builder
 
+RUN apk add --no-cache git
+
 WORKDIR /opt/traccar-web
 
 # Clone the Traccar repository with submodules
