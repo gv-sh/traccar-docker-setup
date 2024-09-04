@@ -1,9 +1,11 @@
+# Dockerfile.webapp
 FROM node:18-alpine as builder
 
 WORKDIR /opt/traccar-web
 COPY ./traccar /opt/traccar-web
 WORKDIR /opt/traccar-web/traccar-web
 
+# Install dependencies and build the web app
 RUN npm install && npm run build
 
 FROM nginx:alpine
