@@ -36,9 +36,3 @@ This repository contains Docker configuration files to set up Traccar on an AWS 
 ## Security Note
 
 This setup uses self-signed SSL certificates, which may trigger security warnings in web browsers. For production use, consider using a proper SSL certificate from a trusted certificate authority.
-
-## References
-
-- [Traccar GitHub Repository](https://github.com/traccar/traccar)
-- [Traccar Docker Setup Instructions](https://www.traccar.org/docker/)
-- [Traccar Manual Installation](https://www.traccar.org/manual-installation/)
