@@ -21,7 +21,6 @@ echo "Configuring Nginx with EC2 Public IP..."
 sed -i "s/\${EC2_PUBLIC_IP}/${EC2_PUBLIC_IP}/g" nginx/nginx.conf
 
 echo "Cloning Traccar repository..."
-mkdir -p backend
 git clone --recursive https://github.com/traccar/traccar.git backend/traccar
 
 echo "Setting up Traccar configuration..."
@@ -35,6 +34,9 @@ fi
 sed -i 's|<entry key="database.url">.*</entry>|<entry key="database.url">'${DATABASE_URL}'</entry>|' conf/traccar.xml
 sed -i 's|<entry key="database.user">.*</entry>|<entry key="database.user">'${DATABASE_USER}'</entry>|' conf/traccar.xml
 sed -i 's|<entry key="database.password">.*</entry>|<entry key="database.password">'${DATABASE_PASSWORD}'</entry>|' conf/traccar.xml
+
+echo "Setting up webapp..."
+cp -r backend/traccar/traccar-web/* webapp/
 
 echo "Building and starting Docker containers..."
 docker-compose up -d --build

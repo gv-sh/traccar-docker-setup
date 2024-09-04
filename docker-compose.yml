@@ -33,8 +33,8 @@ services:
 
   webapp:
     build:
-      context: ./backend/traccar/traccar-web
-      dockerfile: ../../webapp/Dockerfile.webapp
+      context: ./webapp
+      dockerfile: Dockerfile.webapp
     depends_on:
       - backend
 
