@@ -3,14 +3,11 @@ FROM node:14 as build
 
 WORKDIR /app
 
-# Copy package.json and package-lock.json
-COPY traccar-web/package*.json ./
+# Clone the traccar-web repository
+RUN git clone https://github.com/traccar/traccar-web.git .
 
 # Install dependencies
 RUN npm install
-
-# Copy the rest of the code
-COPY traccar-web/ .
 
 # Build the app
 RUN npm run build
