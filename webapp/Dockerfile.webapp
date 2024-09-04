@@ -1,19 +1,25 @@
 # webapp/Dockerfile.webapp
 FROM node:18-alpine as builder
 
+# Install git
 RUN apk add --no-cache git
 
 WORKDIR /opt/traccar-web
 
-# Clone the Traccar repository with submodules
+# Clone the Traccar repository
 RUN git clone --recursive https://github.com/traccar/traccar.git .
 
+# Move to the web app directory
 WORKDIR /opt/traccar-web/traccar-web
 
 # Install dependencies and build the web app
 RUN npm install && npm run build
 
-# Nginx to serve the web app
+# Use Nginx to serve the built web app
 FROM nginx:alpine
 
+# Ensure the dist directory exists
 COPY --from=builder /opt/traccar-web/traccar-web/dist /usr/share/nginx/html
+
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
