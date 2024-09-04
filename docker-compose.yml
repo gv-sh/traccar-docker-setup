@@ -1,4 +1,6 @@
 # docker-compose.yml
+version: '3.8'
+
 services:
   db:
     image: postgres:13
@@ -38,8 +40,6 @@ services:
       - ./certs:/etc/ssl/certs
     ports:
       - "443:443"
-    environment:
-      EC2_PUBLIC_IP: ${EC2_PUBLIC_IP}  # Pass IP to container (if needed)
     depends_on:
       - webapp
 
