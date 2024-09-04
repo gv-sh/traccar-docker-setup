@@ -1,7 +1,6 @@
 FROM openjdk:17-jdk-slim
-WORKDIR ~/traccar/backend
+WORKDIR /app/traccar
 RUN apt-get update && apt-get install -y git curl
 RUN git clone --recursive https://github.com/traccar/traccar.git .
 RUN ./gradlew assemble
-COPY setup/traccar.xml ~/traccar/backend/conf/traccar.xml
 ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true", "-jar", "target/tracker-server.jar", "conf/traccar.xml"]

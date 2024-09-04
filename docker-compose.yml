@@ -9,24 +9,32 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     volumes:
       - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   backend:
     build:
       context: ./backend
-      dockerfile: Dockerfile.backend  # Ensure this path is correct
+      dockerfile: Dockerfile.backend
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     environment:
       DATABASE_URL: "${DATABASE_URL}"
       DATABASE_USER: "${DATABASE_USER}"
       DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
     ports:
       - "8082:8082"
+    volumes:
+      - ./conf:/opt/traccar/conf
 
   webapp:
     build:
-      context: ./webapp
-      dockerfile: Dockerfile.webapp  # Ensure this path is correct
+      context: ./backend/traccar/traccar-web
+      dockerfile: ../../webapp/Dockerfile.webapp
     depends_on:
       - backend
     ports:
@@ -35,8 +43,8 @@ services:
   nginx:
     image: nginx:alpine
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
-      - ./certs:/etc/ssl/certs
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/ssl/certs:ro
     ports:
       - "443:443"
     depends_on:
