@@ -23,12 +23,13 @@ sed -i "s/\${EC2_PUBLIC_IP}/${EC2_PUBLIC_IP}/g" ~/traccar/nginx/nginx.conf
 
 cd ~/traccar/backend
 
-if [ ! -d "traccar" ]; then
-    echo "Cloning Traccar repository..."
-    git clone --recursive https://github.com/traccar/traccar.git .
-else
-    echo "Traccar repository already exists. Skipping clone."
+if [ -d "traccar" ]; then
+    echo "Traccar directory already exists. Removing all contents..."
+    rm -rf ~/traccar/backend/*  # Remove all files and directories, including hidden ones
 fi
+
+echo "Cloning Traccar repository..."
+git clone --recursive https://github.com/traccar/traccar.git .
 
 echo "Copying traccar.xml configuration file..."
 cp ~/traccar/backend/setup/traccar.xml ~/traccar/backend/conf/traccar.xml
