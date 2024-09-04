@@ -37,8 +37,6 @@ services:
       dockerfile: ../../webapp/Dockerfile.webapp
     depends_on:
       - backend
-    ports:
-      - "8080:80"
 
   nginx:
     image: nginx:alpine
@@ -49,6 +47,9 @@ services:
       - "443:443"
     depends_on:
       - webapp
+      - backend
+    environment:
+      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
 
 volumes:
   db_data:
