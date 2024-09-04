@@ -6,7 +6,7 @@ source .env
 
 git pull origin main
 
-mkdir -p ~/traccar/backend ~/traccar/webapp ~/traccar/certs ~/traccar/nginx
+mkdir -p ~/traccar/backend ~/traccar/webapp ~/traccar/certs ~/traccar/nginx ~/traccar/backend/conf
 
 cp backend/Dockerfile.backend ~/traccar/backend/Dockerfile
 cp webapp/Dockerfile.webapp ~/traccar/webapp/Dockerfile
@@ -16,8 +16,12 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout ~/traccar/certs/self
 
 sed -i "s/\${EC2_PUBLIC_IP}/${EC2_PUBLIC_IP}/g" ~/traccar/nginx/nginx.conf
 
+cd ~/traccar/backend
+git clone --recursive https://github.com/traccar/traccar.git .
+
 cp ~/traccar/backend/setup/traccar.xml ~/traccar/backend/conf/traccar.xml
 
+cd ~/traccar
 docker-compose up -d --build
 
 echo "Setup complete! Access your Traccar application at https://${EC2_PUBLIC_IP} or your server's IP."
