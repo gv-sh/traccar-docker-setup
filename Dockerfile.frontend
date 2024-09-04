@@ -9,8 +9,17 @@ RUN git clone https://github.com/traccar/traccar-web.git .
 # Install dependencies
 RUN npm install
 
+# List contents before build
+RUN ls -la
+
 # Build the app
-RUN npm run build
+RUN npm run build || (echo "Build failed" && exit 1)
+
+# List contents after build
+RUN ls -la
+
+# List contents of build directory if it exists
+RUN if [ -d "build" ]; then ls -la build; else echo "build directory not found"; fi
 
 # Production stage
 FROM nginx:alpine
