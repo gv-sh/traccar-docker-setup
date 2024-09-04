@@ -7,10 +7,6 @@ sudo apt-get upgrade -y
 # Install Docker
 sudo apt-get install -y docker.io docker-compose
 
-# Clone the repository
-git clone https://github.com/your-username/traccar-docker-setup.git
-cd traccar-docker-setup
-
 # Create a directory for SSL certificates
 mkdir -p certs
 
