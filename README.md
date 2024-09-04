@@ -24,12 +24,12 @@ This repository contains Docker configuration files to set up Traccar on an AWS 
    ```
 
 3. The script will install Docker, set up self-signed SSL certificates, and start the containers.
-4. Access the Traccar web interface at `https://98.81.195.221`.
-5. Access the Administrator database GUI at `http://98.81.195.221:8080`.
+4. Access the Traccar web interface at `https://public-ip`.
+5. Access the Administrator database GUI at `http://public-ip:8080`.
 
 ## Configuration
 
-- The `nginx.conf` file is configured to use the EC2 instance's public IP (98.81.195.221).
+- The `nginx.conf` file is configured to use the EC2 instance's public IP.
 - Self-signed SSL certificates are generated in the `certs` directory.
 - Adjust database credentials in `docker-compose.yml` if needed.
 

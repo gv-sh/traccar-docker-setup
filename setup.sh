@@ -18,7 +18,7 @@ mkdir -p certs
 sudo openssl req -x509 -nodes -days 365 -newkey rsa:2048 \
     -keyout certs/privkey.pem \
     -out certs/fullchain.pem \
-    -subj "/C=US/ST=State/L=City/O=Organization/CN=98.81.195.221"
+    -subj "/C=US/ST=State/L=City/O=Organization/CN=3.95.219.117"
 
 # Set proper permissions for the certificates
 sudo chown -R $USER:$USER certs
@@ -27,4 +27,4 @@ chmod 600 certs/privkey.pem
 # Start the Docker containers
 sudo docker-compose up -d
 
-echo "Traccar setup complete. Access the web interface at https://98.81.195.221"
+echo "Traccar setup complete. Access the web interface at https://3.95.219.117"
