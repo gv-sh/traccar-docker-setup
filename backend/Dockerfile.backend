@@ -1,22 +1,7 @@
-# backend/Dockerfile.backend
 FROM openjdk:17-jdk-slim
-
-WORKDIR /opt/traccar
-
-# Install necessary packages
+WORKDIR ~/traccar/backend
 RUN apt-get update && apt-get install -y git curl
-
-# Clone the Traccar repository with submodules
 RUN git clone --recursive https://github.com/traccar/traccar.git .
-
-# Build the backend using Gradle
 RUN ./gradlew assemble
-
-# Ensure the conf directory exists
-RUN mkdir -p /opt/traccar/conf
-
-# Copy traccar.xml from the setup folder inside the cloned repository
-RUN cp setup/traccar.xml /opt/traccar/conf/traccar.xml
-
-# Set JVM options and run the application
+COPY setup/traccar.xml ~/traccar/backend/conf/traccar.xml
 ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true", "-jar", "target/tracker-server.jar", "conf/traccar.xml"]
