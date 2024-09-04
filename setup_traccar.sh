@@ -13,7 +13,6 @@ openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout certs/selfsigned.key
 echo "Configuring Nginx with EC2 Public IP..."
 sed -i "s/\${EC2_PUBLIC_IP}/${EC2_PUBLIC_IP}/g" nginx/nginx.conf
 
-# No need to recreate directories; they are already part of the repo
 # Ensure backend directory is empty for git clone
 if [ -d "~/traccar/backend" ]; then
     echo "Traccar backend directory already exists. Removing it..."
@@ -27,6 +26,9 @@ cd ~/traccar/backend
 
 echo "Cloning Traccar repository..."
 git clone --recursive https://github.com/traccar/traccar.git .
+
+# Change back to the directory where docker-compose.yml is located
+cd ~/traccar-docker-setup
 
 echo "Building and starting Docker containers..."
 docker-compose up -d --build
