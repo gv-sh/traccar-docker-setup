@@ -1,0 +1,10 @@
+FROM node:18-alpine as builder
+
+WORKDIR /opt/traccar-web
+COPY ./traccar /opt/traccar-web
+WORKDIR /opt/traccar-web/traccar-web
+
+RUN npm install && npm run build
+
+FROM nginx:alpine
+COPY --from=builder /opt/traccar-web/traccar-web/dist /usr/share/nginx/html
