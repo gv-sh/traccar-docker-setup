@@ -1,5 +1,5 @@
 # Build stage
-FROM node:14 as build
+FROM node:18 as build
 
 WORKDIR /app
 
@@ -12,11 +12,14 @@ RUN npm install
 # Build the app
 RUN npm run build
 
+# List contents after build
+RUN ls -la dist
+
 # Production stage
 FROM nginx:alpine
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /app/build /usr/share/nginx/html
+# Copy the build output to replace the default nginx contents
+COPY --from=build /app/dist /usr/share/nginx/html
 
 # Expose port 80
 EXPOSE 80
