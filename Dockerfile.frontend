@@ -31,9 +31,8 @@ RUN ls -la dist || echo "dist directory not found"
 FROM nginx:alpine
 
 # Copy the build output to replace the default nginx html
-# Try both 'dist' and 'build' directories
-COPY --from=build /app/dist /usr/share/nginx/html/ || \
-    COPY --from=build /app/build /usr/share/nginx/html/
+# Try both 'build' and 'dist' directories
+COPY --from=build /app/dist /usr/share/nginx/html || COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 80
 
