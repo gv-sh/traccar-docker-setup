@@ -1,55 +1,56 @@
-version: '3.8'
+version: '3'
 
 services:
-  db:
-    image: postgres:13
-    environment:
-      POSTGRES_DB: ${POSTGRES_DB}
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    volumes:
-      - db_data:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
-      interval: 10s
-      timeout: 5s
-      retries: 5
-
-  app:
+  traccar:
     build:
-      context: ${APP_DIR}
-      dockerfile: ../Dockerfile.app
-    depends_on:
-      db:
-        condition: service_healthy
-    environment:
-      DATABASE_URL: "${DATABASE_URL}"
-      DATABASE_USER: "${DATABASE_USER}"
-      DATABASE_PASSWORD: "${DATABASE_PASSWORD}"
+      context: .
+      dockerfile: Dockerfile.traccar
     ports:
       - "8082:8082"
     volumes:
-      - ${CONF_DIR}:/opt/traccar/conf
-
-  webapp:
-    build:
-      context: ${WEBAPP_DIR}
-      dockerfile: Dockerfile.webapp
+      - traccar-logs:/opt/traccar/logs
+      - traccar-data:/opt/traccar/data
     depends_on:
-      - app
+      - db
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - traccar
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: traccar
+      MYSQL_USER: traccar
+      MYSQL_PASSWORD: traccarpassword
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  adminer:
+    image: adminer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
 
   nginx:
     image: nginx:alpine
-    volumes:
-      - ${NGINX_DIR}/nginx.conf:/etc/nginx/nginx.conf:ro
-      - ${CERTS_DIR}:/etc/ssl/certs:ro
     ports:
       - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./certs:/etc/nginx/certs:ro
     depends_on:
-      - webapp
-      - app
-    environment:
-      - EC2_PUBLIC_IP=${EC2_PUBLIC_IP}
+      - frontend
+      - traccar
 
 volumes:
-  db_data:
+  traccar-logs:
+  traccar-data:
+  mysql-data:

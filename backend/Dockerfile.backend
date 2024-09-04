@@ -1,6 +1,0 @@
-FROM openjdk:17-jdk-slim
-WORKDIR /opt/traccar
-COPY . .
-RUN apt-get update && apt-get install -y curl
-RUN ./gradlew assemble
-ENTRYPOINT ["java", "-Xms1g", "-Xmx1g", "-Djava.net.preferIPv4Stack=true", "-jar", "target/tracker-server.jar", "conf/traccar.xml"]

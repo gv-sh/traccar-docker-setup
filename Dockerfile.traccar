@@ -1,0 +1,17 @@
+FROM gradle:7.4-jdk11 AS build
+
+WORKDIR /app
+
+RUN git clone https://github.com/traccar/traccar.git .
+RUN gradle build
+
+FROM openjdk:11-jre-slim
+
+WORKDIR /opt/traccar
+
+COPY --from=build /app/build/libs/tracker-server.jar .
+COPY --from=build /app/setup/traccar.xml conf/
+
+EXPOSE 8082
+
+CMD ["java", "-jar", "tracker-server.jar", "conf/traccar.xml"]
