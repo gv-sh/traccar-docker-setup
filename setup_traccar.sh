@@ -27,7 +27,7 @@ cd ~/traccar/backend
 echo "Cloning Traccar repository..."
 git clone --recursive https://github.com/traccar/traccar.git .
 
-# Change back to the directory where docker-compose.yml is located
+# Go back to the root directory
 cd ~/traccar-docker-setup
 
 echo "Building and starting Docker containers..."

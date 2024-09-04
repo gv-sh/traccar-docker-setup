@@ -1,2 +1,2 @@
-chmod +x traccar-docker-setup/setup_traccar.sh
-./traccar-docker-setup/setup_traccar.sh
+chmod +x setup_traccar.sh
+./setup_traccar.sh
