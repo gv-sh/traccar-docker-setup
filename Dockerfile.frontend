@@ -9,30 +9,16 @@ RUN git clone https://github.com/traccar/traccar-web.git .
 # Install dependencies
 RUN npm install
 
-# Display package.json content
-RUN cat package.json
-
-# Display vite.config.js content
-RUN cat vite.config.js
-
 # Attempt to build and capture output
 RUN npm run build
 
 # List contents of current directory
 RUN ls -la
 
-# List contents of build directory if it exists
-RUN ls -la build || echo "build directory not found"
-
-# List contents of dist directory if it exists
-RUN ls -la dist || echo "dist directory not found"
-
 # Production stage
 FROM nginx:alpine
 
-# Copy the build output to replace the default nginx html
-# Try both 'build' and 'dist' directories
-COPY --from=build /app/dist /usr/share/nginx/html || COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/build /usr/share/nginx/html
 
 EXPOSE 80
 
