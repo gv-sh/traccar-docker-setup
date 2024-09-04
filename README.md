@@ -5,7 +5,7 @@ This repository contains Docker configuration files to set up Traccar on an AWS 
 1. Front-end (Traccar Web)
 2. Back-end (Traccar Server)
 3. Database (MySQL)
-4. Database GUI (Administrator)
+4. Database GUI (Adminer)
 5. Nginx proxy for HTTPS
 
 ## Prerequisites
